@@ -9,8 +9,8 @@ const findByName = async (name) => {
   return await repository.findByName(name);
 };
 
-const findAll = async () => {
-  return await repository.findAll();
+const findAll = async (filter, options) => {
+  return await repository.findAll(filter, options);
 };
 
 const save = async (character) => {

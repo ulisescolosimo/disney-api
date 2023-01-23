@@ -8,7 +8,7 @@ const Movie = sequelize.define(
   {
     image: {
       type: DataTypes.STRING(250),
-      allowNull: false,
+      allowNull: true,
     },
     title: {
       type: DataTypes.STRING(250),

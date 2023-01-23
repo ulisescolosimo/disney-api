@@ -3,8 +3,8 @@ const {
   getAllCharacters,
   createCharacter,
   updateCharacter,
-  getById,
-  deleteCharacters,
+  getCharacterById,
+  deleteCharacter,
 } = require("../controllers/characters");
 
 const {
@@ -17,10 +17,10 @@ const {
 
 const router = Router();
 
-router.get("/", getAllCharacters);
+router.get("/", getAllRequestValidation, getAllCharacters);
 router.post("/", postRequestValidations, createCharacter);
 router.put("/:id", putRequestValidations, updateCharacter);
-/* router.get("/:id", getById);
-router.delete("/:id", deleteCharacters); */
+router.get("/:id", getRequestValidation, getCharacterById);
+router.delete("/:id", deleteRequestValidations, deleteCharacter);
 
 module.exports = router;

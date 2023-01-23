@@ -12,10 +12,9 @@ const getAllCharacters = async (req, res, next) => {
   try {
     logger.info("Query: " + JSON.stringify(req.query));
 
-    const characters = await characterService.findAll(
-      req.query.filter,
-      req.query.options
-    );
+    const { filter = "", options = "" } = req.query;
+
+    const characters = await characterService.findAll(filter, options);
     res.json(new Success(characters));
   } catch (err) {
     next(err);
@@ -59,34 +58,35 @@ const updateCharacter = async (req, res, next) => {
  * @param {express.Request} req
  * @param {express.Response} res
  */
-/* const getById = async (req, res) => {
-    try {
-        const user = await userService.findById(req.params.id);
-        res.json(new Success(user));
-    } catch (err) {
-        next(err);
-    }
-}; */
+
+const getCharacterById = async (req, res) => {
+  try {
+    const user = await characterService.findById(req.params.id);
+    res.json(new Success(user));
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  *
  * @param {express.Request} req
  * @param {express.Response} res
  */
-/* const deleteUser = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const user = await userService.remove(id);
-        res.json(new Success(user));
-    } catch (err) {
-        next(err);
-    }
-}; */
+const deleteCharacter = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await characterService.remove(id);
+    res.json(new Success(user));
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
   getAllCharacters,
   createCharacter,
   updateCharacter,
-  /*getById,
-    deleteUser */
+  getCharacterById,
+  deleteCharacter,
 };
