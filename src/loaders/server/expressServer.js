@@ -34,10 +34,6 @@ class ExpressServer {
       res.status(200).end();
     });
 
-    this.app.get("/tests-report", (req, res) => {
-      res.sendFile(path.join(__dirname + "../../../../postman/report.html"));
-    });
-
     this.app.use(this.basePathAuth, require("../../routes/auth"));
     this.app.use(this.basePathUser, require("../../routes/users"));
     this.app.use(this.basePathCharacter, require("../../routes/characters"));
