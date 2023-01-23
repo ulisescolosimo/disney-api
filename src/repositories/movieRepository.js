@@ -31,7 +31,7 @@ class MovieRepository {
 
     if (calification) {
       where.calification = {
-        [Op.eq]: calification,
+        [Op.eq]: calification
       };
     }
 
