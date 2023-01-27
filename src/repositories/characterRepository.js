@@ -14,6 +14,7 @@ class CharacterRepository {
           as: "movies"
         },
       ],
+      attributes: ['id', 'name', 'age', 'weight', 'history']
     });
   }
 
