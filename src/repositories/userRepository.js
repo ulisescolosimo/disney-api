@@ -15,7 +15,7 @@ class UserRepository {
   }
 
   async findById(id) {
-    return await User.findByPk(id);
+    return await User.findById(id);
   }
 
   async save(user) {
