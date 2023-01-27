@@ -1,35 +1,45 @@
 const CharacterRepository = require("../repositories/characterRepository");
-const repository = new CharacterRepository();
+const ImageRepository = require("../repositories/imageRepository");
+const characterRepository = new CharacterRepository();
+const imageRepository = new ImageRepository();
 
-const findById = async (id) => {
-  return await repository.findById(id);
+const findByIdWithMovies = async (id) => {
+  return await characterRepository.findByIdWithMovies(id);
 };
 
 const findByName = async (name) => {
-  return await repository.findByName(name);
+  return await characterRepository.findByName(name);
 };
 
 const findAll = async (filter, options) => {
-  return await repository.findAll(filter, options);
+  return await characterRepository.findAll(filter, options);
 };
 
-const save = async (character) => {
-  return await repository.save(character);
+const save = async (character, movieId) => {
+  return await characterRepository.save(character, movieId);
 };
 
 const update = async (id, character) => {
-  return await repository.update(id, character);
+  return await characterRepository.update(id, character);
 };
 
 const remove = async (id) => {
-  return await repository.remove(id);
+  const character = await characterRepository.findById(id);
+  console.log('Character: ', character);
+  await imageRepository.removeImage(character.image);
+  return await characterRepository.remove(id);
+};
+
+const asociate = async (idCharacter, idMovie) => {
+  await idCharacter.addMovie(idMovie);
 };
 
 module.exports = {
-  findById,
+  findByIdWithMovies,
   findByName,
   findAll,
   save,
   update,
   remove,
+  asociate
 };

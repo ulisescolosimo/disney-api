@@ -2,6 +2,7 @@ const express = require("express");
 const movieService = require("../services/movieService");
 const Success = require("../handlers/successHandler");
 const logger = require("../loaders/logger");
+const imageService = require("../services/imageService");
 
 /**
  *
@@ -61,7 +62,7 @@ const updateMovie = async (req, res, next) => {
 
 const getMovieById = async (req, res, next) => {
   try {
-    const movie = await movieService.findById(req.params.id);
+    const movie = await movieService.findByIdWithCharacters(req.params.id);
     res.json(new Success(movie));
   } catch (err) {
     next(err);
@@ -83,10 +84,48 @@ const deleteMovie = async (req, res, next) => {
   }
 };
 
+/**
+ *
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+
+const uploadMovieImage = async (req, res, next) => {
+  try {
+    const movieId = req.body.id;
+    const image = req.file;
+
+    res.json(new Success(await imageService.uploadMovieImage(movieId, image)));
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ *
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+
+const asociateCharacter = async (req, res, next) => {
+  try {
+    const character = req.character;
+    const movie = req.movie;
+    
+    await movieService.asociate(movie, character);
+
+    res.json(new Success());
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getAllMovies,
   createMovie,
   updateMovie,
   getMovieById,
   deleteMovie,
+  uploadMovieImage,
+  asociateCharacter
 };

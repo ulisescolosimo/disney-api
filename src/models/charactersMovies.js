@@ -13,6 +13,7 @@ Movie.belongsToMany(Character, {
   as: "character",
   foreignKey: "movieId",
 });
+
 Character.belongsToMany(Movie, {
   through: CharactersMovies,
   as: "movies",

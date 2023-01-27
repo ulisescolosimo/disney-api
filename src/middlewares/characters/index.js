@@ -1,38 +1,14 @@
 const { check } = require("express-validator");
 const AppError = require("../../errors/appError");
-const userService = require("../../services/userService");
-const { ROLES, ADMIN_ROLE } = require("../../constants");
-const logger = require("../../loaders/logger");
-const { validationResult } = require("../commons");
+const { ROLES, ADMIN_ROLE, USER_ROLE } = require("../../constants");
+const { validationResult, imageRequired } = require("../commons");
 const { validJWT, hasRole } = require("../auth");
 const characterService = require("../../services/characterService");
+const movieService = require("../../services/movieService");
+const multer = require("multer");
+const upload = multer();
 
 const _nameRequired = check("name", "Name required").not().isEmpty();
-const _lastNameRequired = check("lastName", "Last Name required")
-  .not()
-  .isEmpty();
-const _emailRequired = check("email", "Email required").not().isEmpty();
-const _emailValid = check("email", "Email is invalid").isEmail();
-const _emailExist = check("email").custom(async (email = "") => {
-  const userFound = await userService.findByEmail(email);
-  if (userFound) {
-    throw new AppError("Email already exist in DB", 400);
-  }
-});
-const _optionalEmailValid = check("email", "Email is invalid")
-  .optional()
-  .isEmail();
-const _optionalEmailExist = check("email")
-  .optional()
-  .custom(async (email = "") => {
-    const userFound = await userService.findByEmail(email);
-    if (userFound) {
-      throw new AppError("Email already exist in DB", 400);
-    }
-  });
-const _passwordRequired = check("password", "Password required")
-  .not()
-  .isEmpty();
 const _roleValid = check("role")
   .optional()
   .custom(async (role = "") => {
@@ -40,12 +16,11 @@ const _roleValid = check("role")
       throw new AppError("Ivalid Role", 400);
     }
   });
-const _dateValid = check("birthdate").optional().isDate("MM-DD-YYYY");
 
 const _idRequied = check("id").not().isEmpty();
 const _idIsNumeric = check("id").isNumeric();
 const _idExist = check("id").custom(async (id = "") => {
-  const charFound = await characterService.findById(id);
+  const charFound = await characterService.findByIdWithMovies(id);
   if (!charFound) {
     throw new AppError("The id does not exist in DB", 400);
   }
@@ -61,6 +36,34 @@ const _nameNotExist = check("name").custom(async (name = "") => {
     throw new AppError("The name does not exist in DB", 400);
   }
 });
+
+const _idCharacterExist = check("idCharacter").custom(
+  async (idCharacter = '', {req}) => {
+    const characterFound = await characterService.findByIdWithMovies(idCharacter);
+    if(!characterFound) {
+      throw new AppError('The character id does not exist in DB', 400);
+    }
+    req.character = characterFound
+  }
+);
+
+const _idMovieExist = check("idMovie").custom(
+  async (idMovie = '', {req}) => {
+    const movieFound = await movieService.findByIdWithCharacters(idMovie);
+    if(!movieFound) {
+      throw new AppError('The movie id does not exist in DB', 400);
+    }
+    req.movie = movieFound
+  }
+);
+
+const validationAsociation = [
+  validJWT,
+  hasRole(ADMIN_ROLE),
+  _idCharacterExist,
+  _idMovieExist,
+  validationResult
+];
 
 const postRequestValidations = [
   validJWT,
@@ -103,10 +106,23 @@ const getRequestValidation = [
   validationResult,
 ];
 
+const postImageRequestValidations = [
+  validJWT,
+  hasRole(ADMIN_ROLE, USER_ROLE),
+  upload.single("image"),
+  _idRequied,
+  _idIsNumeric,
+  _idExist,
+  imageRequired,
+  validationResult
+];
+
 module.exports = {
   postRequestValidations,
   putRequestValidations,
   getAllRequestValidation,
   getRequestValidation,
   deleteRequestValidations,
+  postImageRequestValidations,
+  validationAsociation
 };

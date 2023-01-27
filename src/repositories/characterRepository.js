@@ -1,20 +1,27 @@
 const { Op } = require("sequelize");
 const Character = require("../models/characters");
+const Movie = require("../models/movies");
 
 class CharacterRepository {
   constructor() {}
 
-  /* TODO: implementar filtro busqueda query */
-
-  async findById(id) {
-    return await Character.findOne({ where: { id } });
+  async findByIdWithMovies(id) {
+    return await Character.findOne({
+      where: { id },
+      include: [
+        {
+          model: Movie,
+          as: "movies"
+        },
+      ],
+    });
   }
 
   async findByName(name) {
     return await Character.findOne({ where: { name } });
   }
 
-  async findAll({ name, age, weight, movieTitle }, { limit, offset, order }) {
+  async findAll({ name, age, weight }, { limit, offset, order }) {
     let where = {};
 
     if (name) {
@@ -35,15 +42,18 @@ class CharacterRepository {
       };
     }
 
-    return await Character.findAll({ where });
+    return await Character.findAll({ where, attributes: ["image", "name"] });
   }
 
   async findByName(name) {
     return await Character.findOne({ where: { name } });
   }
 
-  async save(character) {
-    return await Character.create(character);
+  async save(character, movieId) {
+    const newCharacter = await Character.create(character);
+    const movie = await Movie.findByPk(movieId);
+    await newCharacter.setMovies(movie);
+    return newCharacter;
   }
 
   async update(id, character) {

@@ -16,13 +16,13 @@ const Movie = sequelize.define(
       unique: true,
     },
     creationDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     calification: {
       type: DataTypes.INTEGER(),
       allowNull: false,
-    },
+    }
   },
   {}
 );
@@ -30,11 +30,13 @@ const Movie = sequelize.define(
 module.exports = Movie;
 
 Movie.belongsTo(ContentType, {
-  as: "contentType",
+  as: "type",
+  targetKey: "id",
   foreignKey: "contentTypeId",
 });
 
 Movie.belongsTo(GenderType, {
-  as: "genderType",
+  as: "gender",
+  targetKey: "id",
   foreignKey: "genderTypeId",
 });
