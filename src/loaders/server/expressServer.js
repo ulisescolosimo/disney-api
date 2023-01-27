@@ -11,6 +11,11 @@ class ExpressServer {
     this.port = config.port;
     this.basePathAuth = `${config.api.prefix}/auth`;
     this.basePathUser = `${config.api.prefix}/users`;
+<<<<<<< HEAD
+    this.basePathCharacter = `${config.api.prefix}/characters`;
+    this.basePathMovies = `${config.api.prefix}/movies`;
+=======
+>>>>>>> master
 
     this._middlewares();
 
@@ -32,12 +37,13 @@ class ExpressServer {
       res.status(200).end();
     });
 
-    this.app.get("/tests-report", (req, res) => {
-      res.sendFile(path.join(__dirname + "../../../../postman/report.html"));
-    });
-
     this.app.use(this.basePathAuth, require("../../routes/auth"));
     this.app.use(this.basePathUser, require("../../routes/users"));
+<<<<<<< HEAD
+    this.app.use(this.basePathCharacter, require("../../routes/characters"));
+    this.app.use(this.basePathMovies, require("../../routes/movies"));
+=======
+>>>>>>> master
   }
 
   _notFound() {

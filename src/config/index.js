@@ -26,4 +26,9 @@ module.exports = {
     secret: process.env.AUTH_SECRET,
     ttl: process.env.AUTH_TTL,
   },
+  aws: {
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    privateAccessKey: process.env.PRIVATE_ACCESS_KEY,
+    s3BucketName: process.env.S3_BUCKET_NAME
+  }
 };
