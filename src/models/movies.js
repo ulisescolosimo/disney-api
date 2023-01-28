@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../loaders/sequelize");
 const ContentType = require("./contentTypes");
 const GenderType = require("./genderTypes");
+const Character = require("./characters");
 
 const Movie = sequelize.define(
   "Movies",
@@ -28,6 +29,12 @@ const Movie = sequelize.define(
 );
 
 module.exports = Movie;
+
+Movie.belongsToMany(Character, {
+  as: "characters",
+  through: "characterMovies",
+  foreignKey: "movieId",
+});
 
 Movie.belongsTo(ContentType, {
   as: "type",

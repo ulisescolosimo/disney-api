@@ -6,7 +6,7 @@ const logger = require("./logger");
 module.exports = async () => {
   try {
     await sequelize.authenticate();
-    sequelize.sync({ alter: true });
+    sequelize.sync({ force: false });
     console.log("Connection has been established successfully.");
 
     const server = new ExpressServer();
