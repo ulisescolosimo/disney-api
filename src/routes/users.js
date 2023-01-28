@@ -12,7 +12,7 @@ const {
   putRequestValidations,
   getAllRequestValidation,
   getRequestValidation,
-  deleteRequestValidations
+  deleteRequestValidations,
 } = require("../middlewares/users");
 
 const router = Router();
