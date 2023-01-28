@@ -1,15 +1,12 @@
 const { check } = require("express-validator");
 const AppError = require("../../errors/appError");
 const userService = require("../../services/userService");
-const { ROLES, ADMIN_ROLE } = require("../../constants");
+const { ROLES } = require("../../constants");
 const logger = require("../../loaders/logger");
 const { validationResult } = require("../commons");
 const { validJWT, hasRole } = require("../auth");
 
 const _nameRequired = check("name", "Name required").not().isEmpty();
-const _lastNameRequired = check("lastName", "Last Name required")
-  .not()
-  .isEmpty();
 const _emailRequired = check("email", "Email required").not().isEmpty();
 const _emailValid = check("email", "Email is invalid").isEmail();
 const _emailExist = check("email").custom(async (email = "") => {
@@ -42,6 +39,7 @@ const _roleValid = check("role")
 const _dateValid = check("birthdate").optional().isDate("MM-DD-YYYY");
 
 const _idRequied = check("id").not().isEmpty();
+
 const _idIsMongoDB = check("id").isMongoId();
 const _idExist = check("id").custom(async (id = "") => {
   const userFound = await userService.findById(id);
@@ -101,5 +99,5 @@ module.exports = {
   putRequestValidations,
   getAllRequestValidation,
   getRequestValidation,
-  deleteRequestValidations,
+  deleteRequestValidations
 };
