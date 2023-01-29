@@ -91,7 +91,7 @@ GET /movies?genre=idGenero
 GET /movies?order=ASC | DESC
 
 Instalación
-git clone https://github.com/fedapon/alkemy-nodejs-challenge.git
+git clone https://github.com/ulisescolosimo/alkemy-node-challenge.git
 
 cd alkemy-nodejs-challenge
 
