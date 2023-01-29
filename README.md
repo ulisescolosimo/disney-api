@@ -98,6 +98,3 @@ cd alkemy-nodejs-challenge
 npm install
 
 npm run start
-La documentación del challenge está disponible a utilizando swagger a traves del endpoint:
-
-/docs
