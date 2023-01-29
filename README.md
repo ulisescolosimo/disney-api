@@ -93,7 +93,7 @@ GET /movies?order=ASC | DESC
 Instalación
 git clone https://github.com/ulisescolosimo/alkemy-node-challenge.git
 
-cd alkemy-nodejs-challenge
+cd alkemy-node-challenge
 
 npm install
 
